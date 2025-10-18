@@ -24,7 +24,20 @@ const server = http.createServer((req, res) => {
     // Else send a generic binary file types
     const content_type = mime_type[ext_name] || "appllication/octet-stream" // octet-stream is a generic binary file type
 
-    
+    // SERVE FILES TO THE CLIENT
+    fs.readFile(file_path, (err, content) => {
+        if (err) {
+            if (err.code === "ENOENT") { // Erron NO ENTry
+                res.writeHead(404, { "Content-Type" : "text/html" });
+                res.end("404 : File Not Found");
+            } 
+        } else {
+            // write head part of the body
+            res.writeHead(200, {"Content-Type" : content_type});
+            // write response body
+            res.end(content, "utf-8");
+        }
+    })
 });
 
 // Listen on defined PORT
