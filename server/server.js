@@ -7,7 +7,7 @@ const PORT = 8080;
 
 // Create a server
 const server = http.createServer((req, res) => {
-    const file_path = path.join(__dirname, req.url === "/" ? "index.html" : req.url)
+    const file_path = path.join(__dirname, req.url === "/" ? "index.html" : req.url);
 
     const ext_name = String(path.extname(file_path.toLowerCase()));
 
@@ -33,7 +33,7 @@ const server = http.createServer((req, res) => {
             } 
         } else {
             // write head part of the body
-            res.writeHead(200, {"Content-Type" : content_type});
+            res.writeHead(200, { "Content-Type" : content_type });
             // write response body
             res.end(content, "utf-8");
         }
