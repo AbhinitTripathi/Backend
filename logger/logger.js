@@ -5,7 +5,7 @@ const EventEmitter = require("events");
 
 class Logger extends EventEmitter {
     log(message) {
-        this.emit("Message", { message });
+        this.emit("message", { message });
     }
 }
 
@@ -13,11 +13,12 @@ const logger = new Logger();
 const log_file = "./eventlog.txt";
 
 const log_to_file = (event) => {
-    const log_message = `${new Date().toISOString()} - ${event.message}`;
+    const log_message = `${new Date().toISOString()} - ${event.message} \n`;
     fs.appendFileSync(log_file, log_message);
 }
 
-// Costantly istening to an event named "message"
+// Costantly listening to an event named "message"
+// Listens when the code on ilne 8 emits
 logger.on("message", log_to_file);
 
 setInterval(() => {
