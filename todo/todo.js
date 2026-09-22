@@ -1,18 +1,54 @@
 const fs = require("fs");
 const file_path = "./tasks.json";
 
+/**
+ * @typedef {Object} Task
+ * @property {number} id
+ * @property {string} Task
+ */
+
 // Helper Functions
+/**
+ * Persists the provided task list to disk.
+ * @param {Task[]} tasks - The array of tasks to save.
+ * @returns {void}
+ */
+function saveTask(tasks) {
+    fs.writeFileSync(file_path, JSON.stringify(tasks));
+}
+
+/**
+ * Loads all saved tasks from disk.
+ * @returns {Task[]} The list of persisted tasks or an empty array when the file is missing/invalid.
+ */
+function loadTask() {
+    try {
+        return JSON.parse(fs.readFileSync(file_path).toString());
+    } catch (error) {
+        return [];
+    }
+}
+
+/**
+ * Adds a new task to the list and refreshes the display.
+ * @param {string} argument - The task description to save.
+ * @returns {void}
+ */
 function addTask(argument) {
     const tasks = loadTask();
     tasks.push({
-        "id" : Date.now(),
-        "Task" : argument
+        "id": Date.now(),
+        "Task": argument
     });
     saveTask(tasks);
     console.log("Task Added Successfully!!");
     listTask();
 }
 
+/**
+ * Lists all tasks currently saved.
+ * @returns {number|void} Returns 3 when no tasks exist; otherwise logs tasks and returns nothing.
+ */
 function listTask() {
     const tasks = loadTask();
     if (tasks.length <= 0) {
@@ -26,25 +62,17 @@ function listTask() {
     console.log();
 }
 
-function loadTask() {
-    try {
-        return JSON.parse(fs.readFileSync(file_path).toString()); 
-    } catch (error) {
-        return [];
-    }
-}
-
+/**
+ * Removes a task by its ID.
+ * @param {number} argument - The task ID to remove.
+ * @returns {void}
+ */
 function removeTask(argument) {
     let tasks = loadTask();
     tasks = tasks.filter(task => task.id !== argument);
     saveTask(tasks);
     console.log("Task Removed Successfully");
     listTask();
-}
-
-function saveTask(tasks) {
-    const task = loadTask();
-    fs.writeFileSync(file_path, JSON.stringify(tasks));
 }
 
 // If no argument given just list all tasks
@@ -62,10 +90,10 @@ if (process.argv.length < 3) {
     return 2;
 }
 
-const command  = process.argv[2];
+const command = process.argv[2];
 const argument = process.argv.length == 4 ? process.argv[3] : null;
 
-if (command === "add") { 
+if (command === "add") {
     addTask(argument);
 } else if (command === "list") {
     listTask();
